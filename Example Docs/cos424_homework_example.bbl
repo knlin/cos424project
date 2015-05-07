@@ -1,0 +1,40 @@
+\begin{thebibliography}{1}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{URL }
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi:\discretionary{}{}{}#1}\else
+  \providecommand{\doi}{doi:\discretionary{}{}{}\begingroup
+  \urlstyle{rm}\Url}\fi
+\providecommand{\bibAnnoteFile}[1]{%
+  \IfFileExists{#1}{\begin{quotation}\noindent\textsc{Key:} #1\\
+  \textsc{Annotation:}\ \input{#1}\end{quotation}}{}}
+\providecommand{\bibAnnote}[2]{%
+  \begin{quotation}\noindent\textsc{Key:} #1\\
+  \textsc{Annotation:}\ #2\end{quotation}}
+\providecommand{\eprint}[2][]{\url{#2}}
+
+\bibitem{zhu2009}
+Zhu J, Ahmed A, Xing EP (2009) Medlda: maximum margin supervised topic models
+  for regression and classification.
+\newblock In: Proceedings of the 26th Annual International Conference on
+  Machine Learning. ACM, pp. 1257--1264.
+\bibAnnoteFile{zhu2009}
+
+\bibitem{lacoste2009}
+Lacoste-Julien S, Sha F, Jordan MI (2009) Disclda: Discriminative learning for
+  dimensionality reduction and classification.
+\newblock In: Advances in neural information processing systems. pp. 897--904.
+\bibAnnoteFile{lacoste2009}
+
+\bibitem{bird2009}
+Bird S, Klein E, Loper E (2009) Natural language processing with Python.
+\newblock " O'Reilly Media, Inc.".
+\bibAnnoteFile{bird2009}
+
+\bibitem{scikit-learn}
+Pedregosa F, Varoquaux G, Gramfort A, Michel V, Thirion B, et~al. (2011)
+  Scikit-learn: Machine learning in {P}ython.
+\newblock Journal of Machine Learning Research 12: 2825--2830.
+\bibAnnoteFile{scikit-learn}
+
+\end{thebibliography}
