@@ -1,8 +1,6 @@
-with open("key.csv") as f:
-    content = f.readlines()
-stations = dict()
-content = content[1:]
-for i in content:
-    a = i.split(",")
-    stations[int(a[0])] = int(a[1])
-print stations
+import pandas as pd
+train = pd.read_csv("train.csv")
+test = pd.read_csv("test.csv")
+keys = pd.read_csv("key.csv")
+weather = pd.read_csv("weather.csv")
+print weather
