@@ -10,12 +10,12 @@ def is_number(s):
         return False
 
 def read_data():
-    with open("train.csv") as t, \
-         open("weather.csv") as w, \
-         open("key.csv") as k, \
-         open("train2.csv", 'wb') as t2, \
-         open("weather2.csv", 'wb') as w2, \
-         open("key2.csv", 'wb') as k2:
+    with open("data/train.csv") as t, \
+         open("data/weather.csv") as w, \
+         open("data/key.csv") as k, \
+         open("data/train2.csv", 'wb') as t2, \
+         open("data/weather2.csv", 'wb') as w2, \
+         open("data/key2.csv", 'wb') as k2:
 
         t_in = csv.reader(t)
         t_out = csv.writer(t2)
@@ -79,7 +79,7 @@ def get_storms(trainfile):
         for row in csv.reader(t):
             train.append(row)
 
-    with open("storms_train.csv", 'wb') as s:
+    with open("data/storms_train.csv", 'wb') as s:
         s_out = csv.writer(s)
         s_out.writerow(['date', 'store_nbr'])
         for row in train[1:]:
@@ -93,7 +93,7 @@ def get_storms(trainfile):
 
 def main():
     # read_data()
-    get_storms("train2.csv")
+    get_storms("data/train2.csv")
 
 if __name__ == '__main__':
     main()
