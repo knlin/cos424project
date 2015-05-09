@@ -1,9 +1,8 @@
 import pandas as pd
 import random
+import datetime
 
 def split_weather():
-    train = pd.read_csv('train.csv')
-    keys = pd.read_csv('key.csv')
     with open("key.csv") as f:
         content = f.readlines()
     normalkey = dict()
@@ -16,7 +15,6 @@ def split_weather():
         content = f.readlines()
     train_list = []
     content = content[1:]
-    import datetime
     for i in content:
         a = i.split(",")
         d = a[0].split("/")
@@ -30,16 +28,13 @@ def split_weather():
     rain = weather_train[weather_train.preciptotal >= '2.0']
     rain = rain[rain.preciptotal != 'M']
 
-    storm_dates = set()
     storm_stations = set()
     storm_dict = dict()
-
     for i in snow.index.values:
-        storm_dates.add( snow.ix[i].date )
         storm_stations.add( (snow.ix[i].station_nbr, snow.ix[i].date) )
     for i in rain.index.values:
-        storm_dates.add( rain.ix[i].date )
         storm_stations.add( (rain.ix[i].station_nbr, rain.ix[i].date) )
+
     for i in storm_stations:
         if i[1] in storm_dict:
             storm_dict[i[1]].append(int(i[0]))
@@ -50,11 +45,15 @@ def split_weather():
     for i in train_list:
         stat = normalkey[i[1]]
         if i[0] in storm_dict and int(stat) in storm_dict[i[0]]:
-            real_test.append(i)
+            n = random.randint(0, 1)
+            if n == 1:
+                real_test.append(i)
+            else:
+                real_train.append(i)
         else:
             real_train.append(i)
-    print len(real_test)
-    print len(real_train)
+    print "size of test data: %d" % len(real_test)
+    print "size of train data: %d" % len(real_train)
     return (real_train, real_test)
 
 split_weather()
