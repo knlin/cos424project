@@ -13,3 +13,6 @@ what I've been doing to weather.csv
 
 - Replaced all Ms in snowfall in stations (1,9,13,16, 8, 10, 5) with 0s, because nonzero snowfall has never been reported at that station.
 
+- OPEN PROBLEM: Station 5
+
+- Deleting entire sunrise, sunset column. half of the stations don't keep track of it
