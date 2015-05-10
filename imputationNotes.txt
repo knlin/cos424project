@@ -1,0 +1,7 @@
+what I've been doing to weather.csv
+
+replaced all T values with 0.00001
+
+deleted depart column, 11.5k out of 20k entries were missing
+
+replaced all snowfall of M with 0 if tmin > 32
