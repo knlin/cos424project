@@ -1,6 +1,6 @@
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.linear_model import Perceptron, LinearRegression, Lasso, Ridge, ElasticNet
-from sklearn.ensemble import GradientBoostingRegressor, AdaBoostRegressor
+from sklearn.ensemble import GradientBoostingRegressor, AdaBoostRegressor, RandomForestRegressor
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.metrics import mean_squared_error
 import pandas as pd
@@ -17,6 +17,7 @@ regressions["EN"] = ElasticNet()
 regressions["GBR"] = GradientBoostingRegressor()
 regressions["ADA"] = AdaBoostRegressor()
 regressions["DT"] = DecisionTreeRegressor()
+regressions["RF"] = RandomForestRegressor()
 
 WT = ('HZ', 'FU', 'BLSN', 'VCTS', 'DZ', 'BR', 'FG', 'BCFG', 'DU',
       'FZRA', 'TS', 'RA', 'PL', 'GR', 'FZDZ', 'VCFG', 'FG+', 'TSRA',
@@ -84,7 +85,7 @@ for i in range(1, 46):
     items = testdata.item_nbr.values
     #dates = testdata["date"].values
 
-    a = do_regression("LS", traindata,unitdata,testdata)
+    a = do_regression("RF", traindata,unitdata,testdata)
     a = map(abs, a)
     MSE += mean_squared_error(a, resultdata)
     tot = 0.0
