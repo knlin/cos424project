@@ -6,10 +6,9 @@ import pandas as pd
 import datetime
 import numpy as np
 
-WT = ('BCFG', 'BLDU', 'BLSN', 'BR', 'DU', 'DZ', 'FG', 'FG+',
-                    'FU', 'FZDZ', 'FZFG', 'FZRA', 'GR', 'GS', 'HZ', 'MIFG',
-                     'PL', 'PRFG', 'RA', 'SG', 'SN', 'SQ', 'TS', 'TSRA',
-                      'TSSN', 'UP', 'VCFG', 'VCTS')
+WT = ('HZ', 'FU', 'BLSN', 'VCTS', 'DZ', 'BR', 'FG', 'BCFG', 'DU',
+      'FZRA', 'TS', 'RA', 'PL', 'GR', 'FZDZ', 'VCFG', 'FG+', 'TSRA',
+      'FZFG', 'BLDU', 'MIFG', 'SQ', 'UP', 'SN')
 
 def get_dow(date):
     date = str(date).strip()
@@ -82,6 +81,13 @@ train = pd.read_csv("data/features.csv")
 train['dow'] = train['date'].map(lambda x: get_dow(str(x)))
 train['date'] = train['date'].apply(lambda x: date_to_doy(str(x)))
 train.fillna(0, inplace=True)
+a = list(set(train.codesum.values))
+sfoo = set()
+for i in a:
+    c = i.split(" ")
+    for j in c:
+        sfoo.add(j)
+print sfoo
 for t in WT:
     train[t] = train['codesum'].map(lambda x: t in str(x))
 """departs = set_to_dict(list(set(train.depart.values)))
