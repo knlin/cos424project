@@ -53,10 +53,10 @@ def do_regression(r, x, y, testx):
 train = pd.read_csv("data/featurestrain.csv")
 test = pd.read_csv("data/featurestest.csv")
 train['dow'] = train['date'].map(lambda x: get_dow(str(x)))
-train['date'] = train['date'].apply(lambda x: date_to_doy(str(x)))
+#train['date'] = train['date'].apply(lambda x: date_to_doy(str(x)))
 train.fillna(0, inplace=True)
 test['dow'] = test['date'].map(lambda x: get_dow(str(x)))
-test['date'] = test['date'].apply(lambda x: date_to_doy(str(x)))
+#test['date'] = test['date'].apply(lambda x: date_to_doy(str(x)))
 test.fillna(0, inplace=True)
 a = list(set(train.codesum.values))
 for t in WT:
@@ -75,11 +75,13 @@ for i in range(1, 46):
     traindata = train[train.store_nbr == i]
     unitdata = traindata["units"]
     traindata = traindata.drop("units", 1)
+    traindata = traindata.drop("date", 1)
     testdata = test[test.store_nbr == i]
     resultdata = testdata["units"]
     testdata = testdata.drop("units", 1)
+    testdata = testdata.drop("date", 1)
     items = testdata.item_nbr.values
-    dates = testdata["date"].values
+    #dates = testdata["date"].values
 
     a = do_regression("GBR", traindata,unitdata,testdata)
     a = map(abs, a)
@@ -87,8 +89,8 @@ for i in range(1, 46):
     tot = 0.0
     resultdata = resultdata.values
     for j in range(0, len(a)):
-        error += math.pow(a[j] - resultdata[j], 2)
+        error += math.pow(math.log(a[j]+1) - math.log(resultdata[j]+1), 2)
         tot += abs(a[j] - resultdata[j])
-    print "absolute error for store %d: %d" % (i, tot)
-error = float(error) / len(test["date"])
+    print "absolute error for store %d (%d points): %d" % (i, len(testdata["tavg"]), tot)
+error = float(error) / len(test["tavg"])
 print "RMSE: %d" % math.sqrt(error)

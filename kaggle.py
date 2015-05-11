@@ -11,7 +11,6 @@ import math
 regressions = dict()
 regressions["LR"] = LinearRegression()
 regressions["KNN"] = KNeighborsRegressor(n_neighbors=5)
-regressions["PR"] = Perceptron()
 regressions["LS"] = Lasso()
 regressions["RI"] = Ridge()
 regressions["EN"] = ElasticNet()
@@ -55,10 +54,10 @@ train = pd.read_csv("data/kaggle_train_features.csv")
 test = pd.read_csv("data/kaggle_test_features.csv")
 
 train['dow'] = train['date'].map(lambda x: get_dow(str(x)))
-train['date'] = train['date'].apply(lambda x: date_to_doy(str(x)))
+#train['date'] = train['date'].apply(lambda x: date_to_doy(str(x)))
 
 test['dow'] = test['date'].map(lambda x: get_dow(str(x)))
-test['date'] = test['date'].apply(lambda x: date_to_doy(str(x)))
+#test['date'] = test['date'].apply(lambda x: date_to_doy(str(x)))
 
 train.fillna(0, inplace=True)
 test.fillna(0, inplace=True)
@@ -79,7 +78,10 @@ for i in range(1, 46):
     testdata = test[test.store_nbr == i]
     items = testdata.item_nbr.values
     dates = testdata["date"].values
+    testdata = testdata.drop("date", 1)
+    traindata = traindata.drop("date", 1)
 
     a = do_regression("GBR", traindata, unitdata, testdata)
+    a = map(abs, a)
     for j in range(0, len(a)):
         print "%d_%d_%s,%d" % (i, items[j], dates[j], a[j])
