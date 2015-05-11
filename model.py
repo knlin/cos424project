@@ -71,6 +71,7 @@ test = test.drop("codesum", 1)
 # train by store
 MSE = 0.0
 error = 0.0
+errorl = 0.0
 for i in range(1, 46):
     traindata = train[train.store_nbr == i]
     unitdata = traindata["units"]
@@ -89,8 +90,11 @@ for i in range(1, 46):
     tot = 0.0
     resultdata = resultdata.values
     for j in range(0, len(a)):
-        error += math.pow(math.log(a[j]+1) - math.log(resultdata[j]+1), 2)
+        errorl += math.pow(math.log(a[j]+1) - math.log(resultdata[j]+1), 2)
+        error += math.pow(a[j] - resultdata[j], 2)
         tot += abs(a[j] - resultdata[j])
     print "absolute error for store %d (%d points): %d" % (i, len(testdata["tavg"]), tot)
 error = float(error) / len(test["tavg"])
+errorl = float(errorl) / len(test["tavg"])
 print "RMSE: %d" % math.sqrt(error)
+print "RMSE: %d" % math.sqrt(errorl)
