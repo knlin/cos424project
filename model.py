@@ -68,33 +68,37 @@ results = test["units"]
 train = train.drop("codesum", 1)
 test = test.drop("codesum", 1)
 
-# train by store
-MSE = 0.0
-error = 0.0
-errorl = 0.0
-for i in range(1, 46):
-    traindata = train[train.store_nbr == i]
-    unitdata = traindata["units"]
-    traindata = traindata.drop("units", 1)
-    traindata = traindata.drop("date", 1)
-    testdata = test[test.store_nbr == i]
-    resultdata = testdata["units"]
-    testdata = testdata.drop("units", 1)
-    testdata = testdata.drop("date", 1)
-    items = testdata.item_nbr.values
-    #dates = testdata["date"].values
 
-    a = do_regression("LS", traindata,unitdata,testdata)
-    a = map(abs, a)
-    MSE += mean_squared_error(a, resultdata)
-    tot = 0.0
-    resultdata = resultdata.values
-    for j in range(0, len(a)):
-        errorl += math.pow(math.log(a[j]+1) - math.log(resultdata[j]+1), 2)
-        error += math.pow(a[j] - resultdata[j], 2)
-        tot += abs(a[j] - resultdata[j])
-    print "absolute error for store %d (%d points): %d" % (i, len(testdata["tavg"]), tot)
-error = float(error) / len(test["tavg"])
-errorl = float(errorl) / len(test["tavg"])
-print "RMSE: %f" % math.sqrt(error)
-print "RMSLE: %f" % math.sqrt(errorl)
+for k in regressions:
+    # train by store
+    MSE = 0.0
+    error = 0.0
+    errorl = 0.0
+
+    print "doing "+k
+    for i in range(1, 46):
+        traindata = train[train.store_nbr == i]
+        unitdata = traindata["units"]
+        traindata = traindata.drop("units", 1)
+        traindata = traindata.drop("date", 1)
+        testdata = test[test.store_nbr == i]
+        resultdata = testdata["units"]
+        testdata = testdata.drop("units", 1)
+        testdata = testdata.drop("date", 1)
+        items = testdata.item_nbr.values
+        #dates = testdata["date"].values
+    
+        a = do_regression(k, traindata,unitdata,testdata)
+        a = map(abs, a)
+        MSE += mean_squared_error(a, resultdata)
+        tot = 0.0
+        resultdata = resultdata.values
+        for j in range(0, len(a)):
+            errorl += math.pow(math.log(a[j]+1) - math.log(resultdata[j]+1), 2)
+            error += math.pow(a[j] - resultdata[j], 2)
+            tot += abs(a[j] - resultdata[j])
+        print "absolute error for store %d (%d points): %d" % (i, len(testdata["tavg"]), tot)
+    error = float(error) / len(test["tavg"])
+    errorl = float(errorl) / len(test["tavg"])
+    print "RMSE: %f" % math.sqrt(error)
+    print "RMSLE: %f" % math.sqrt(errorl)

@@ -18,3 +18,30 @@ what I've been doing to weather.csv
 - Deleting entire sunrise, sunset column. half of the stations don't keep track of it
 
 - imputed M values from estimated TAvg values relative to 65F
+
+- Dealing with Missing Sea Level Prerssure Values from 8: 
+	- Average ratio of sea level/stnpressure was 1.03209
+
+
+Replacing all Ms in sealevel pressure by multipling stdpressure * location coefficient
+
+station 1: 1.005789
+station 2: 1.039186
+station 3: 1.024403
+station 4  1.023747
+	
+6: 1.01715
+7: 1.04832
+8: 1.03209
+9: 1.02643
+10: 1
+11: 1.001
+12: 1.0016	
+13: 1.236
+14: 1.0465
+15: 1.0127
+16: 1.00347
+17: 1.0232
+18: 1.017
+19: 1.0266
+20: 1.0237
