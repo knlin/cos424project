@@ -71,6 +71,7 @@ def read_data():
 
 def get_storms(trainfile):
     train = []
+    storms = []
     storm_count = 0
     prev_date = ''
     prev_store = ''
@@ -90,6 +91,35 @@ def get_storms(trainfile):
                 s_out.writerow([row[0], row[1]])
 
     print storm_count
+
+    with open("data/storms_train.csv") as s:
+        for row in csv.reader(s):
+            storms.append(row)
+
+    storm_dict = {}
+    for row in storms:
+        date      = row[0]
+        store_nbr = row[1]
+        if store_nbr in storm_dict:
+            storm_dict[store_nbr].append(date)
+        else:
+            storm_dict[store_nbr] = [date]
+
+    date_format = '%Y-%m-%d'
+    for row in train[1:]:
+        date      = datetime.datetime.strptime(row[0], date_format)
+        store_nbr = row[1]
+        days_till_storm = 99999
+        if store_nbr in storm_dict:
+            for storm_date in storm_dict[store_nbr]:
+                storm_date = datetime.datetime.strptime(storm_date, date_format)
+                delta = storm_date - date
+                if abs(delta.days) < abs(days_till_storm):
+                    days_till_storm = delta.days
+            # if days_till_storm > 10:
+            #     days_till_storm = 10
+        row.append(days_till_storm)
+        print row
 
 def main():
     # read_data()
