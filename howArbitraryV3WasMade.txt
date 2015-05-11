@@ -18,3 +18,9 @@ what I've been doing to weather.csv
 - Deleting entire sunrise, sunset column. half of the stations don't keep track of it
 
 - imputed M values from estimated TAvg values relative to 65F
+
+
+replaced all Ms with the average of the column:
+
+TMAX AVG	TMIN AVG:	e		f		g		h		i		j	k	l	m		n		o		p		avgSpeed
+71.62112617	50.6545464	61.38268283	47.45117035	53.880459	9.700446814	5.967501046	#DIV/0!	0	0	29.16127393	30.00578878	6.407832953	18.68004519	7.913672303
