@@ -39,3 +39,13 @@ Station 17:
 Station 18: 
 Station 19: 
 Station 20: 
+
+------------------------------------------------------------------------------
+arbitraryImputationsV2:
+
+deleted all bad station 5 data
+
+replaced all Ms with the average of the row:
+
+TMAX AVG	TMIN AVG:	e	f	g	h	i	j	k	l	m	n	o	p	q
+71.62112617	50.6545464	61.38268283	47.45117035	53.880459	9.700446814	5.967501046	#DIV/0!	0	0	29.16127393	30.00578878	6.407832953	18.68004519	7.913672303
