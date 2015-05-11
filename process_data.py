@@ -11,11 +11,9 @@ def is_number(s):
 
 def read_data():
     with open("data/train.csv") as t, \
-         open("data/weather.csv") as w, \
+         open("data/weatherOriginal.csv") as w, \
          open("data/key.csv") as k, \
-         open("data/train2.csv", 'wb') as t2, \
-         open("data/weather2.csv", 'wb') as w2, \
-         open("data/key2.csv", 'wb') as k2:
+         open("data/train2.csv", 'wb') as t2:
 
         t_in = csv.reader(t)
         t_out = csv.writer(t2)
@@ -29,15 +27,11 @@ def read_data():
         print "Done."
 
         w_in = csv.reader(w)
-        w_out = csv.writer(w2)
-        w_out.writerow(next(w_in, None))
         weather = []
         for row in w_in:
             weather.append(row)
 
         k_in = csv.reader(k)
-        k_out = csv.writer(k2)
-        k_out.writerow(next(k_in, None))
         key = []
         for row in k_in:
             key.append(row)
@@ -79,23 +73,25 @@ def get_storms(trainfile):
     with open(trainfile) as t:
         for row in csv.reader(t):
             train.append(row)
-
+    # write list of storms (date, store_nbr)
     with open("data/storms_train.csv", 'wb') as s:
         s_out = csv.writer(s)
         s_out.writerow(['date', 'store_nbr'])
         for row in train[1:]:
-            if row[4] == '1' and row[0] != prev_date and row[1] != prev_store:
-                storm_count += 1
-                prev_date = row[0]
-                prev_store = row[1]
-                s_out.writerow([row[0], row[1]])
-
-    print storm_count
-
+            try:
+                if row[4] == '1' and row[0] != prev_date and row[1] != prev_store:
+                    storm_count += 1
+                    prev_date = row[0]
+                    prev_store = row[1]
+                    s_out.writerow([row[0], row[1]])
+            except IndexError:
+                print row
+    print "Number of storms: %d" % storm_count
+    # import list of storms (date, store_nbr)
     with open("data/storms_train.csv") as s:
         for row in csv.reader(s):
             storms.append(row)
-
+    # storm_dict = map from store_nbr to list of storm dates
     storm_dict = {}
     for row in storms:
         date      = row[0]
@@ -104,22 +100,32 @@ def get_storms(trainfile):
             storm_dict[store_nbr].append(date)
         else:
             storm_dict[store_nbr] = [date]
-
-    date_format = '%Y-%m-%d'
-    for row in train[1:]:
-        date      = datetime.datetime.strptime(row[0], date_format)
-        store_nbr = row[1]
-        days_till_storm = 99999
-        if store_nbr in storm_dict:
-            for storm_date in storm_dict[store_nbr]:
-                storm_date = datetime.datetime.strptime(storm_date, date_format)
-                delta = storm_date - date
-                if abs(delta.days) < abs(days_till_storm):
-                    days_till_storm = delta.days
-            # if days_till_storm > 10:
-            #     days_till_storm = 10
-        row.append(days_till_storm)
-        print row
+    # write new feature "days_after_storm" to train3.csv
+    print "Writing to train3.csv..."
+    with open("train3.csv", 'wb') as t3:
+        t_out = csv.writer(t3)
+        train[0][-1] = "days_after_storm"
+        t_out.writerow(train[0])
+        date_format = '%Y-%m-%d'
+        days_threshold = 100000
+        for row in train[1:]:
+            date      = datetime.datetime.strptime(row[0], date_format) # datetime.datetime.strptime(row[0], '%m/%d/%Y')
+            store_nbr = row[1]
+            days_after_storm = 213 # 1/1/2012-8/1/2012
+            if store_nbr in storm_dict:
+                for storm_date in storm_dict[store_nbr]:
+                    storm_date = datetime.datetime.strptime(storm_date, date_format)
+                    delta = date - storm_date
+                    if abs(delta.days) < abs(days_after_storm):
+                        days_after_storm = delta.days
+            if days_after_storm > days_threshold:
+                days_after_storm = days_threshold
+            elif days_after_storm < -days_threshold:
+                days_after_storm = -days_threshold
+            row[-1] = days_after_storm
+            row[0] = date.strftime('%-m/%-d/%Y')
+            t_out.writerow(row)
+    print "Done."
 
 def main():
     # read_data()
