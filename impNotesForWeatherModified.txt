@@ -1,0 +1,41 @@
+what I've been doing to weather.csv
+
+- replaced all T values with 0.00001
+
+- deleted depart column, 11.5k out of 20k entries were missing
+
+- replaced all snowfall of M with 0 if tmin > 32
+
+
+- AVERAGE of 20,000 rows (TAVG - AVERAGE(TMAX-TMIN) = 0.244908)
+
+- I'm replacing all Ms in TAVG with the average of corresponding TMAX - TMIN + 0.244908
+
+- Replaced all Ms in snowfall in stations (1,9,13,16, 8, 10, 5) with 0s, because nonzero snowfall has never been reported at that station.
+
+- OPEN PROBLEM: Station 5
+
+- Deleting entire sunrise, sunset column. half of the stations don't keep track of it
+
+Ms in:
+
+Station  1: 63
+Station  2: 87
+Station  3: 36
+Station  4: 94
+Station  5: 3705
+Station  6: 35
+Station  7: 344
+Station  8: 2209
+Station  9: 173
+Station 10: 0
+Station 11: 
+Station 12: 
+Station 13: 
+Station 14: 
+Station 15: 
+Station 16: 
+Station 17: 
+Station 18: 
+Station 19: 
+Station 20: 
